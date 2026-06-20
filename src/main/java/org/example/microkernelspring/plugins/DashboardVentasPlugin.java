@@ -1,11 +1,11 @@
 package org.example.microkernelspring.plugins;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.microkernelspring.events.SaleCreatedEvent;
-import org.example.microkernelspring.kernel.KernelContext;
-import org.example.microkernelspring.kernel.Plugin;
-import org.example.microkernelspring.kernel.PluginType;
-import org.example.microkernelspring.kernel.notification.NotificationGateway;
+import org.example.microkernelspring.shared.events.SaleCreatedEvent;
+import org.example.microkernelspring.shared.kernel.KernelContext;
+import org.example.microkernelspring.shared.kernel.Plugin;
+import org.example.microkernelspring.shared.kernel.PluginType;
+import org.example.microkernelspring.shared.kernel.notification.NotificationGateway;
 import org.springframework.stereotype.Component;
 
 @Component
