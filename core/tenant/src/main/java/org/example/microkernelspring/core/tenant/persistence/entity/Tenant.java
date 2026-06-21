@@ -8,7 +8,7 @@ import java.util.UUID;
 
 /**
  * La entidad raíz del sistema. Todo dato tenant-scoped cuelga de aquí
- * (por tenantId lógico/real según el schema). El subdomain o un header
+ * (por id lógico/real según el schema). El subdomain o un header
  * X-Tenant-Id resuelve quién está pidiendo qué.
  */
 @Entity

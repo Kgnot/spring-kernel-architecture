@@ -27,7 +27,7 @@ public interface TenantPartnerLinkRepository extends JpaRepository<TenantPartner
             WHERE l.active = true
               AND (l.tenant.id = :tenantId OR l.partnerTenant.id = :tenantId)
             """)
-    List<TenantPartnerLink> findActiveLinksInvolvingTenant(@Param("tenantId") UUID tenantId);
+    List<TenantPartnerLink> findActiveLinksInvolvingTenant(@Param("id") UUID tenantId);
 
     Page<TenantPartnerLink> findByTenantAndActiveTrue(Tenant tenant, Pageable pageable);
 }

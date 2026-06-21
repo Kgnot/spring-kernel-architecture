@@ -1,7 +1,8 @@
 package org.example.microkernelspring.core.tenant.service;
 
-import org.example.microkernelspring.core.tenant.persistence.entity.Tenant;
 import org.example.microkernelspring.core.tenant.persistence.repository.TenantPluginRepository;
+import org.example.microkernelspring.core.tenant.service.dto.EnableTenantDto;
+import org.example.microkernelspring.core.tenant.service.dto.TenantPluginCodesDto;
 import org.example.microkernelspring.shared.application.kernel.Plugin;
 import org.example.microkernelspring.shared.application.kernel.PluginRegistry;
 import org.example.microkernelspring.shared.application.kernel.PluginType;
@@ -25,24 +26,41 @@ public class TenantPluginService {
         this.registry = registry;
     }
 
-    public List<Tenant> getEnabledTenants(String pluginId) {
-        return repository.findEnabledTenantsByPlugin(pluginId);
-    }
-
-    public List<Plugin> getActivePlugins(UUID tenantId) {
-        return repository.findActiveByTenantId(tenantId)
+    public List<EnableTenantDto> getEnabledTenants(String pluginId) {
+        return repository.findEnabledTenantsByPlugin(pluginId)
                 .stream()
-                .map(tenantPlugin -> registry.findById(tenantPlugin.getPlugin().getCode()))
-                .flatMap(Optional::stream)
+                .map(tenant -> new EnableTenantDto(
+                        tenant.getId(),
+                        tenant.getLegalName()
+                ))
                 .toList();
     }
 
+    /**
+     * Contrato de aplicación: devuelve los códigos activos del tenant.
+     * No expone entidades JPA ni objetos Plugin.
+     */
+    public TenantPluginCodesDto getActivePluginCodes(UUID tenantId) {
+        List<String> pluginCodes = repository.findActivePluginCodesByTenantId(tenantId);
+
+        return new TenantPluginCodesDto(
+                tenantId,
+                pluginCodes
+        );
+    }
+
+    /**
+     * Uso interno del kernel: resuelve plugins Java cargados en memoria.
+     * Este mét no debería exponerse por TenantApi hacia otros módulos.
+     */
     public List<Plugin> getActivePluginsByType(
             UUID tenantId,
             PluginType type
     ) {
-        return getActivePlugins(tenantId)
+        return repository.findActivePluginCodesByTenantId(tenantId)
                 .stream()
+                .map(registry::findById)
+                .flatMap(Optional::stream)
                 .filter(plugin -> plugin.getType() == type)
                 .toList();
     }

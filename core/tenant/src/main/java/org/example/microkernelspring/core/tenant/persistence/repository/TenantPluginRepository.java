@@ -18,21 +18,24 @@ public interface TenantPluginRepository extends JpaRepository<TenantPlugin, UUID
 
     Page<TenantPlugin> findByTenant(Tenant tenant, Pageable pageable);
 
-    Optional<TenantPlugin> findByTenantAndPlugin_Code(Tenant tenant, String pluginCode);
+    Optional<TenantPlugin> findByTenantAndPlugin_Code(
+            Tenant tenant,
+            String pluginCode
+    );
 
-    /**
-     * Acceso rápido sin paginar: resuelve qué plugins activos tiene un
-     * tenant, pensado para cachear/usar en cada request como feature flags.
-     */
     @Query("""
             SELECT tp FROM TenantPlugin tp
-            WHERE tp.tenant.id = :tenantId AND tp.status.code = 'active'
+            WHERE tp.tenant.id = :tenantId
+              AND tp.status.code = 'active'
             """)
     List<TenantPlugin> findActiveByTenantId(@Param("tenantId") UUID tenantId);
 
-    Page<TenantPlugin> findByStatus(LkpPluginStatus status, Pageable pageable);
-
-    boolean existsByTenantIdAndPluginIdAndStatus_Code(UUID tenantId, UUID pluginId, String statusCode);
+    @Query("""
+            SELECT tp.plugin.code FROM TenantPlugin tp
+            WHERE tp.tenant.id = :tenantId
+              AND tp.status.code = 'active'
+            """)
+    List<String> findActivePluginCodesByTenantId(@Param("tenantId") UUID tenantId);
 
     @Query("""
             SELECT tp.tenant FROM TenantPlugin tp
@@ -40,10 +43,4 @@ public interface TenantPluginRepository extends JpaRepository<TenantPlugin, UUID
               AND tp.status.code = 'active'
             """)
     List<Tenant> findEnabledTenantsByPlugin(@Param("pluginId") String pluginId);
-
-    @Query("""
-            SELECT tp.plugin.code FROM TenantPlugin tp
-            WHERE tp.tenant.id = :tenantId AND tp.status.code = 'active'
-            """)
-    List<String> findActivePluginCodesByTenantId(@Param("tenantId") UUID tenantId);
 }

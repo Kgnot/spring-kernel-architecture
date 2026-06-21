@@ -40,7 +40,7 @@ public interface SiteRepository extends JpaRepository<Site, UUID> {
               AND ST_DWithin(s.location, ST_SetSRID(ST_MakePoint(:lng, :lat), 4326), :radiusMeters)
             ORDER BY ST_Distance(s.location, ST_SetSRID(ST_MakePoint(:lng, :lat), 4326))
             """, nativeQuery = true)
-    List<Site> findNearby(@Param("tenantId") UUID tenantId,
+    List<Site> findNearby(@Param("id") UUID tenantId,
                            @Param("lat") double lat,
                            @Param("lng") double lng,
                            @Param("radiusMeters") double radiusMeters);

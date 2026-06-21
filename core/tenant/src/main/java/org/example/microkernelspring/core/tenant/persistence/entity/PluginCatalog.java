@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 /**
- * Catálogo GLOBAL (sin tenantId) de módulos/plugins que la plataforma ofrece,
+ * Catálogo GLOBAL (sin id) de módulos/plugins que la plataforma ofrece,
  * ej: tracking de pedidos, analítica avanzada, facturación electrónica.
  * No se borra, se desactiva (isActive = false).
  */
