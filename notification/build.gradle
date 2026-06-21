@@ -1,0 +1,31 @@
+plugins {
+    id 'java-library'
+    id 'io.spring.dependency-management'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:4.1.0"
+    }
+}
+
+dependencies {
+    // Contratos: Plugin, KernelContext, EventListener, eventos compartidos.
+    implementation project(':shared')
+    implementation project(':core:sale')
+
+    // JavaMailSender, MailProperties, configuración de mail.
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // @Component, @Service, etc.
+    implementation 'org.springframework:spring-context'
+
+    // @Slf4j, @Getter, @Builder, etc.
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}

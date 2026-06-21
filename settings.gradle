@@ -1,1 +1,21 @@
 rootProject.name = 'microkernel-spring'
+
+include 'app'
+include 'shared'
+include 'kernel'
+include 'websocket'
+include 'notification'
+include 'rabbitmq'
+
+include 'core:analytics'
+include 'core:geo'
+include 'core:hr'
+include 'core:identity'
+include 'core:logistics'
+include 'core:sale'
+include 'core:stock'
+include 'core:tenant'
+
+
+include 'plugins:dashboardVentasPlugin'
+include 'plugins:iaAssistantPlugin'
