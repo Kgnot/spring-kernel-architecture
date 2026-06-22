@@ -19,3 +19,6 @@ include 'core:tenant'
 
 include 'plugins:dashboardVentasPlugin'
 include 'plugins:iaAssistantPlugin'
+include 'plugins:electronicInvoicePlugin'
+include 'plugins:payrollLitePlugin'
+include 'plugins:trackingPlugin'
