@@ -4,13 +4,15 @@ import org.example.microkernelspring.core.stock.controller.request.CreateSupplie
 import org.example.microkernelspring.core.stock.controller.response.SupplierResponse;
 import org.example.microkernelspring.core.stock.service.dto.SupplierDto;
 
+import java.util.UUID;
+
 public class SupplierWebMapper {
 
-    public static SupplierDto toServiceDto(CreateSupplierRequest request) {
+    public static SupplierDto toServiceDto(CreateSupplierRequest request, UUID tenantId) {
         if (request == null) return null;
         return new SupplierDto(
                 null,
-                request.tenantId(),
+                tenantId,
                 request.name(),
                 request.taxId(),
                 request.active()

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.UUID;
 
 public record LoginResult(
+        String token,
+        String refreshToken,
         UUID userLoginId,
         UUID tenantId,
         String tenantSubdomain,

@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/tenants/{tenantId}/lkp-movement-types")
+@RequestMapping("/api/lkp-movement-types")
 @RequiredArgsConstructor
 public class LkpMovementTypeController {
 
     private final LkpMovementTypeService lkpMovementTypeService;
 
     @GetMapping
-    public ResponseEntity<List<LkpMovementTypeResponse>> findAll(@PathVariable UUID tenantId) {
+    public ResponseEntity<List<LkpMovementTypeResponse>> findAll() {
         List<LkpMovementTypeResponse> response = lkpMovementTypeService.findAll().stream()
                 .map(LkpMovementTypeWebMapper::toResponse)
                 .toList();
@@ -27,10 +27,7 @@ public class LkpMovementTypeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LkpMovementTypeResponse> findById(
-            @PathVariable UUID tenantId,
-            @PathVariable UUID id
-    ) {
+    public ResponseEntity<LkpMovementTypeResponse> findById(@PathVariable UUID id) {
         LkpMovementTypeResponse response = LkpMovementTypeWebMapper.toResponse(
                 lkpMovementTypeService.findById(id)
         );

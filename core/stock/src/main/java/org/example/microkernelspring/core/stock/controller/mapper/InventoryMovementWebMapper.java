@@ -4,13 +4,15 @@ import org.example.microkernelspring.core.stock.controller.request.RegisterInven
 import org.example.microkernelspring.core.stock.controller.response.InventoryMovementResponse;
 import org.example.microkernelspring.core.stock.service.dto.InventoryMovementDto;
 
+import java.util.UUID;
+
 public class InventoryMovementWebMapper {
 
-    public static InventoryMovementDto toServiceDto(RegisterInventoryMovementRequest request) {
+    public static InventoryMovementDto toServiceDto(RegisterInventoryMovementRequest request, UUID tenantId) {
         if (request == null) return null;
         return new InventoryMovementDto(
                 null,
-                request.tenantId(),
+                tenantId,
                 request.inventoryId(),
                 request.movementTypeId(),
                 request.quantity(),

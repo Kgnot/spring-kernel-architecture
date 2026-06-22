@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public record RegisterInventoryMovementRequest(
-        UUID tenantId,
         UUID inventoryId,
         UUID movementTypeId,
         BigDecimal quantity,

@@ -7,6 +7,7 @@ import org.example.microkernelspring.core.stock.controller.response.SupplierResp
 import org.example.microkernelspring.core.stock.service.SupplierService;
 import org.example.microkernelspring.core.stock.usecase.CreateSupplierUseCase;
 import org.example.microkernelspring.core.stock.usecase.DeleteSupplierUseCase;
+import org.example.microkernelspring.shared.infra.util.SecurityContextHelper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/tenants/{tenantId}/suppliers")
+@RequestMapping("/api/suppliers")
 @RequiredArgsConstructor
 public class SupplierController {
 
@@ -24,7 +25,9 @@ public class SupplierController {
     private final DeleteSupplierUseCase deleteSupplierUseCase;
 
     @GetMapping
-    public ResponseEntity<List<SupplierResponse>> findAll(@PathVariable UUID tenantId) {
+    public ResponseEntity<List<SupplierResponse>> findAll() {
+        UUID tenantId = SecurityContextHelper.getCurrentTenantId();
+
         List<SupplierResponse> response = supplierService.findAllByTenant(tenantId).stream()
                 .map(SupplierWebMapper::toResponse)
                 .toList();
@@ -33,10 +36,9 @@ public class SupplierController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SupplierResponse> findById(
-            @PathVariable UUID tenantId,
-            @PathVariable UUID id
-    ) {
+    public ResponseEntity<SupplierResponse> findById(@PathVariable UUID id) {
+        UUID tenantId = SecurityContextHelper.getCurrentTenantId();
+
         SupplierResponse response = SupplierWebMapper.toResponse(
                 supplierService.findByIdAndTenant(id, tenantId)
         );
@@ -45,22 +47,20 @@ public class SupplierController {
     }
 
     @PostMapping
-    public ResponseEntity<SupplierResponse> create(
-            @PathVariable UUID tenantId,
-            @RequestBody CreateSupplierRequest request
-    ) {
+    public ResponseEntity<SupplierResponse> create(@RequestBody CreateSupplierRequest request) {
+        UUID tenantId = SecurityContextHelper.getCurrentTenantId();
+
         SupplierResponse response = SupplierWebMapper.toResponse(
-                createSupplierUseCase.execute(SupplierWebMapper.toServiceDto(request))
+                createSupplierUseCase.execute(SupplierWebMapper.toServiceDto(request, tenantId))
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(
-            @PathVariable UUID tenantId,
-            @PathVariable UUID id
-    ) {
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        UUID tenantId = SecurityContextHelper.getCurrentTenantId();
+
         deleteSupplierUseCase.execute(id, tenantId);
         return ResponseEntity.noContent().build();
     }

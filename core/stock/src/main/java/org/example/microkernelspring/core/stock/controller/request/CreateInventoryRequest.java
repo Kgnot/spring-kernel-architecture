@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public record CreateInventoryRequest(
-        UUID tenantId,
         UUID productId,
         UUID siteId,
         BigDecimal quantityOnHand,

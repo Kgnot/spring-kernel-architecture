@@ -6,6 +6,7 @@ import org.example.microkernelspring.core.stock.controller.request.CreateInvento
 import org.example.microkernelspring.core.stock.controller.response.InventoryResponse;
 import org.example.microkernelspring.core.stock.service.InventoryService;
 import org.example.microkernelspring.core.stock.usecase.CreateInventoryUseCase;
+import org.example.microkernelspring.shared.infra.util.SecurityContextHelper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/tenants/{tenantId}/inventories")
+@RequestMapping("/api/inventories")
 @RequiredArgsConstructor
 public class InventoryController {
 
@@ -22,7 +23,11 @@ public class InventoryController {
     private final CreateInventoryUseCase createInventoryUseCase;
 
     @GetMapping
-    public ResponseEntity<List<InventoryResponse>> findAll(@PathVariable UUID tenantId) {
+    public ResponseEntity<List<InventoryResponse>> findAll() {
+        // Sacamos el token por el contexto de seguridad
+        UUID tenantId = SecurityContextHelper.getCurrentTenantId();
+
+        // Se lo pasamos al servicio
         List<InventoryResponse> response = inventoryService.findAllByTenant(tenantId).stream()
                 .map(InventoryWebMapper::toResponse)
                 .toList();
@@ -31,10 +36,9 @@ public class InventoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InventoryResponse> findById(
-            @PathVariable UUID tenantId,
-            @PathVariable UUID id
-    ) {
+    public ResponseEntity<InventoryResponse> findById(@PathVariable UUID id) {
+        UUID tenantId = SecurityContextHelper.getCurrentTenantId();
+
         InventoryResponse response = InventoryWebMapper.toResponse(
                 inventoryService.findByIdAndTenant(id, tenantId)
         );
@@ -43,12 +47,13 @@ public class InventoryController {
     }
 
     @PostMapping
-    public ResponseEntity<InventoryResponse> create(
-            @PathVariable UUID tenantId,
-            @RequestBody CreateInventoryRequest request
-    ) {
+    public ResponseEntity<InventoryResponse> create(@RequestBody CreateInventoryRequest request) {
+        // de aqui sacamos el tenant
+        UUID tenantId = SecurityContextHelper.getCurrentTenantId();
+        var serviceDto = InventoryWebMapper.toServiceDto(request, tenantId);
+
         InventoryResponse response = InventoryWebMapper.toResponse(
-                createInventoryUseCase.execute(InventoryWebMapper.toServiceDto(request))
+                createInventoryUseCase.execute(serviceDto)
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);

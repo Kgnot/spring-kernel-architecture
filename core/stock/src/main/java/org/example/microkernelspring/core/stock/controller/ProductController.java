@@ -7,6 +7,7 @@ import org.example.microkernelspring.core.stock.controller.response.ProductRespo
 import org.example.microkernelspring.core.stock.service.ProductService;
 import org.example.microkernelspring.core.stock.usecase.CreateProductUseCase;
 import org.example.microkernelspring.core.stock.usecase.DeleteProductUseCase;
+import org.example.microkernelspring.shared.infra.util.SecurityContextHelper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/tenants/{tenantId}/products")
+@RequestMapping("/api/products")
 @RequiredArgsConstructor
 public class ProductController {
 
@@ -24,7 +25,9 @@ public class ProductController {
     private final DeleteProductUseCase deleteProductUseCase;
 
     @GetMapping
-    public ResponseEntity<List<ProductResponse>> findAll(@PathVariable UUID tenantId) {
+    public ResponseEntity<List<ProductResponse>> findAll() {
+        UUID tenantId = SecurityContextHelper.getCurrentTenantId();
+
         List<ProductResponse> response = productService.findAllByTenant(tenantId).stream()
                 .map(ProductWebMapper::toResponse)
                 .toList();
@@ -33,10 +36,9 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponse> findById(
-            @PathVariable UUID tenantId,
-            @PathVariable UUID id
-    ) {
+    public ResponseEntity<ProductResponse> findById(@PathVariable UUID id) {
+        UUID tenantId = SecurityContextHelper.getCurrentTenantId();
+
         ProductResponse response = ProductWebMapper.toResponse(
                 productService.findByIdAndTenant(id, tenantId)
         );
@@ -45,22 +47,20 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductResponse> create(
-            @PathVariable UUID tenantId,
-            @RequestBody CreateProductRequest request
-    ) {
+    public ResponseEntity<ProductResponse> create(@RequestBody CreateProductRequest request) {
+        UUID tenantId = SecurityContextHelper.getCurrentTenantId();
+
         ProductResponse response = ProductWebMapper.toResponse(
-                createProductUseCase.execute(ProductWebMapper.toServiceDto(request))
+                createProductUseCase.execute(ProductWebMapper.toServiceDto(request, tenantId))
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(
-            @PathVariable UUID tenantId,
-            @PathVariable UUID id
-    ) {
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        UUID tenantId = SecurityContextHelper.getCurrentTenantId();
+
         deleteProductUseCase.execute(id, tenantId);
         return ResponseEntity.noContent().build();
     }

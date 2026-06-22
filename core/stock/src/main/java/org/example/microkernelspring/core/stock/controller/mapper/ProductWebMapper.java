@@ -8,11 +8,11 @@ import java.util.UUID;
 
 public class ProductWebMapper {
 
-    public static ProductDto toServiceDto(CreateProductRequest request) {
+    public static ProductDto toServiceDto(CreateProductRequest request, UUID tenantId) {
         if (request == null) return null;
         return new ProductDto(
                 null,
-                request.tenantId(),
+                tenantId,
                 request.sku(),
                 request.name(),
                 request.description(),

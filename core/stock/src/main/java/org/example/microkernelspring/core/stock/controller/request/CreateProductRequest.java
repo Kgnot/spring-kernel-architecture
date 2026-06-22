@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public record CreateProductRequest(
-        UUID tenantId,
         String sku,
         String name,
         String description,
