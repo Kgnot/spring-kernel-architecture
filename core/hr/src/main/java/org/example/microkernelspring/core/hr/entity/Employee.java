@@ -1,6 +1,8 @@
 package org.example.microkernelspring.core.hr.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -13,6 +15,7 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "employee", schema = "hr")
+@Data
 public class Employee {
 
     @Id
@@ -60,79 +63,4 @@ public class Employee {
         this.createdAt = Instant.now();
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public UUID getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(UUID tenantId) {
-        this.tenantId = tenantId;
-    }
-
-    public UUID getProfileId() {
-        return profileId;
-    }
-
-    public void setProfileId(UUID profileId) {
-        this.profileId = profileId;
-    }
-
-    public UUID getSiteId() {
-        return siteId;
-    }
-
-    public void setSiteId(UUID siteId) {
-        this.siteId = siteId;
-    }
-
-    public String getPosition() {
-        return position;
-    }
-
-    public void setPosition(String position) {
-        this.position = position;
-    }
-
-    public LocalDate getHireDate() {
-        return hireDate;
-    }
-
-    public void setHireDate(LocalDate hireDate) {
-        this.hireDate = hireDate;
-    }
-
-    public LocalDate getTerminationDate() {
-        return terminationDate;
-    }
-
-    public void setTerminationDate(LocalDate terminationDate) {
-        this.terminationDate = terminationDate;
-    }
-
-    public BigDecimal getSalary() {
-        return salary;
-    }
-
-    public void setSalary(BigDecimal salary) {
-        this.salary = salary;
-    }
-
-    public LkpEmploymentStatus getEmploymentStatus() {
-        return employmentStatus;
-    }
-
-    public void setEmploymentStatus(LkpEmploymentStatus employmentStatus) {
-        this.employmentStatus = employmentStatus;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
 }

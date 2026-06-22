@@ -263,6 +263,19 @@ CREATE TABLE "hr"."employee_ledger" (
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
+CREATE TABLE "hr"."employee_salary_history" (
+                                                "id" uuid PRIMARY KEY DEFAULT (gen_random_uuid()),
+                                                "tenant_id" uuid NOT NULL,
+                                                "employee_id" uuid NOT NULL,
+                                                "salary" numeric(19,2) NOT NULL,
+                                                "currency" varchar(3) NOT NULL,
+                                                "effective_date" date NOT NULL,
+                                                "reason" varchar(500),
+                                                "created_at" timestamptz NOT NULL DEFAULT (now())
+);
+
+-- STOCK
+
 CREATE TABLE "stock"."lkp_product_category" (
   "id" uuid PRIMARY KEY DEFAULT (gen_random_uuid()),
   "code" varchar(50) UNIQUE NOT NULL,
@@ -759,6 +772,27 @@ COMMENT ON COLUMN "hr"."employee_ledger"."reason" IS 'ej: "préstamo nómina", "
 COMMENT ON COLUMN "hr"."employee_ledger"."reference_invoice_id" IS 'referencia LÓGICA opcional a sale.invoice.id, si el descuento viene de una compra del empleado';
 
 COMMENT ON COLUMN "hr"."employee_ledger"."created_by" IS 'referencia LÓGICA a identity.users_login.id';
+
+CREATE INDEX "idx_employee_salary_history_employee_effective_date" ON "hr"."employee_salary_history" ("employee_id", "effective_date");
+
+CREATE INDEX "idx_employee_salary_history_tenant" ON "hr"."employee_salary_history" ("tenant_id");
+
+COMMENT ON TABLE "hr"."employee_salary_history" IS 'Historial de salarios del empleado: cada cambio de salario genera una nueva fila con su fecha de vigencia (effective_date). Permite reconstruir la evolución salarial histórica del empleado.';
+
+COMMENT ON COLUMN "hr"."employee_salary_history"."tenant_id" IS 'referencia LÓGICA a tenant.tenants.id';
+
+COMMENT ON COLUMN "hr"."employee_salary_history"."employee_id" IS 'FK real (mismo schema) a hr.employee.id';
+
+COMMENT ON COLUMN "hr"."employee_salary_history"."salary" IS 'salario vigente desde effective_date';
+
+COMMENT ON COLUMN "hr"."employee_salary_history"."currency" IS 'ISO 4217';
+
+COMMENT ON COLUMN "hr"."employee_salary_history"."effective_date" IS 'fecha desde la cual rige este salario';
+
+COMMENT ON COLUMN "hr"."employee_salary_history"."reason" IS 'motivo del cambio: aumento anual, promoción, ajuste por inflación, etc.';
+
+ALTER TABLE "hr"."employee_salary_history" ADD FOREIGN KEY ("employee_id") REFERENCES "hr"."employee" ("id") DEFERRABLE INITIALLY IMMEDIATE;
+
 
 COMMENT ON TABLE "stock"."lkp_product_category" IS 'Categorías de producto normalizadas (antes era un varchar libre). Jerárquica vía parent_category_id.';
 

@@ -1,6 +1,8 @@
 package org.example.microkernelspring.core.hr.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
@@ -12,6 +14,7 @@ import java.util.UUID;
  */
 @Entity
 @Table(name = "employee_ledger", schema = "hr")
+@Data
 public class EmployeeLedger {
 
     @Id
@@ -65,79 +68,4 @@ public class EmployeeLedger {
         this.createdAt = Instant.now();
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public UUID getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(UUID tenantId) {
-        this.tenantId = tenantId;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
-    public LkpLedgerEntryType getEntryType() {
-        return entryType;
-    }
-
-    public void setEntryType(LkpLedgerEntryType entryType) {
-        this.entryType = entryType;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public BigDecimal getBalanceAfter() {
-        return balanceAfter;
-    }
-
-    public void setBalanceAfter(BigDecimal balanceAfter) {
-        this.balanceAfter = balanceAfter;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    public UUID getReferenceInvoiceId() {
-        return referenceInvoiceId;
-    }
-
-    public void setReferenceInvoiceId(UUID referenceInvoiceId) {
-        this.referenceInvoiceId = referenceInvoiceId;
-    }
-
-    public UUID getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(UUID createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
 }
