@@ -1,6 +1,6 @@
 package org.example.microkernelspring.notification;
 
-import org.example.microkernelspring.core.sale.events.MonthlyRevenueReportGeneratedEvent;
+import org.example.microkernelspring.core.sale.infrastructure.events.MonthlyRevenueReportGeneratedEvent;
 import org.example.microkernelspring.shared.application.events.DomainEventHandler;
 import org.springframework.stereotype.Component;
 

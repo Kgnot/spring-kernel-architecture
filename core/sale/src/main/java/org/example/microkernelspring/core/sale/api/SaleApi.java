@@ -1,21 +1,21 @@
 package org.example.microkernelspring.core.sale.api;
 
-import java.math.BigDecimal;
-import java.time.Instant;
+import org.example.microkernelspring.core.sale.api.dto.*;
+
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface SaleApi {
-
     // Lecturas
-    List<CustomerApi> getAllCustomers();
-    CustomerApi getCustomerById(UUID id);
+    Optional<CustomerDtoApi> getCustomerById(UUID customerId);
+    List<LkpDtoApi> getCustomerTypes();
+    List<LkpDtoApi> getInvoiceStatuses();
+    List<LkpDtoApi> getPaymentMethods();
+    List<InvoiceDetailDtoApi> getInvoiceDetails(UUID invoiceId);
 
     // Escrituras
-    void createCustomer(CustomerApi customer);
-    void createInvoice(InvoiceApi invoice);
-
-    // DTOs API
-    record CustomerApi(UUID id, UUID tenantId, UUID profileId, String companyName, String taxId, BigDecimal creditLimit) {}
-    record InvoiceApi(UUID id, UUID tenantId, UUID siteId, UUID customerId, UUID employeeId, String invoiceNumber, UUID statusId, BigDecimal subtotal, BigDecimal taxTotal, BigDecimal discountTotal, BigDecimal grandTotal, String currency, Instant issuedAt, Instant dueAt) {}
+    void createCustomer(CreateCustomerDtoApi customer);
+    void createInvoice(CreateInvoiceDtoApi invoice);
+    void addInvoiceDetail(AddInvoiceDetailDtoApi invoiceDetail);
 }
