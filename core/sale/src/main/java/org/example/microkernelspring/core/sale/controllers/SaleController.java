@@ -1,9 +1,9 @@
-package org.example.microkernelspring.core.sale.controller;
+package org.example.microkernelspring.core.sale.controllers;
 
 
-import org.example.microkernelspring.core.sale.controller.request.CreateSaleRequest;
-import org.example.microkernelspring.core.sale.service.SaleService;
-import org.example.microkernelspring.core.sale.service.dto.CreateSaleDto;
+import org.example.microkernelspring.core.sale.controllers.request.CreateSaleRequest;
+import org.example.microkernelspring.core.sale.services.SaleService;
+import org.example.microkernelspring.core.sale.services.dto.CreateSaleDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

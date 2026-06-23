@@ -1,7 +1,7 @@
-package org.example.microkernelspring.core.sale.service;
+package org.example.microkernelspring.core.sale.services;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.microkernelspring.core.sale.service.dto.CreateSaleDto;
+import org.example.microkernelspring.core.sale.services.dto.CreateSaleDto;
 import org.example.microkernelspring.shared.application.kernel.KernelContext;
 import org.springframework.stereotype.Service;
 

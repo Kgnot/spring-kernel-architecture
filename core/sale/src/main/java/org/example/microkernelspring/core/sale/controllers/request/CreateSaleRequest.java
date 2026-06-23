@@ -1,4 +1,4 @@
-package org.example.microkernelspring.core.sale.controller.request;
+package org.example.microkernelspring.core.sale.controllers.request;
 
 public record CreateSaleRequest(
         Long tenantId,

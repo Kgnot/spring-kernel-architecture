@@ -1,4 +1,4 @@
-package org.example.microkernelspring.core.sale.service.dto;
+package org.example.microkernelspring.core.sale.services.dto;
 
 import java.math.BigDecimal;
 
