@@ -7,6 +7,7 @@ public record AuthenticatedUser(
         UUID userId,
         UUID tenantId,
         String email,
-        List<String> roles
+        List<String> roles,
+        List<String> plugins
 ) {
 }

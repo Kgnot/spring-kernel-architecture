@@ -11,4 +11,8 @@ dependencyManagement {
 
 dependencies {
     api 'org.springframework.security:spring-security-core'
+    //spring
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    //aspects
+    implementation 'org.springframework.boot:spring-boot-starter-aspectj'
 }

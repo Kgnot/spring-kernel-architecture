@@ -46,8 +46,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // Roles
                 @SuppressWarnings("unchecked")
                 List<String> roles = claims.get("roles", List.class);
+                //Plugins
+                @SuppressWarnings("unchecked")
+                List<String> plugins = claims.get("plugins", List.class);
                 // Ahora creamos el objeto de usuari autenticado
-                AuthenticatedUser authenticatedUser = new AuthenticatedUser(userId, tenantId, email, roles);
+                AuthenticatedUser authenticatedUser = new AuthenticatedUser(userId, tenantId, email, roles, plugins);
                 //convertimos roles a Authorities
                 var authorities = roles.stream()
                         .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
