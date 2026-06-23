@@ -3,6 +3,7 @@ package org.example.microkernelspring.core.hr.controller;
 import org.example.microkernelspring.core.hr.controller.dto.EmployeeLedgerResponse;
 import org.example.microkernelspring.core.hr.service.EmployeeLedgerService;
 import org.example.microkernelspring.core.hr.service.dto.EmployeeLedgerFilterDto;
+import org.example.microkernelspring.shared.infra.util.SecurityContextHelper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -18,7 +19,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/hr/tenants")
+@RequestMapping("/api/hr")
 public class EmployeeLedgerController {
 
     private final EmployeeLedgerService employeeLedgerService;
@@ -27,9 +28,8 @@ public class EmployeeLedgerController {
         this.employeeLedgerService = employeeLedgerService;
     }
 
-    @GetMapping("/{tenantId}/ledger")
+    @GetMapping("/ledger")
     public ResponseEntity<Page<EmployeeLedgerResponse>> search(
-            @PathVariable("tenantId") UUID tenantId,
             @RequestParam(value = "employeeId", required = false) UUID employeeId,
             @RequestParam(value = "from", required = false) LocalDate from,
             @RequestParam(value = "to", required = false) LocalDate to,
@@ -40,6 +40,8 @@ public class EmployeeLedgerController {
                     direction = Sort.Direction.DESC
             ) Pageable pageable
     ) {
+        UUID tenantId = SecurityContextHelper.getCurrentTenantId();
+
         EmployeeLedgerFilterDto filter = new EmployeeLedgerFilterDto(
                 tenantId,
                 employeeId,

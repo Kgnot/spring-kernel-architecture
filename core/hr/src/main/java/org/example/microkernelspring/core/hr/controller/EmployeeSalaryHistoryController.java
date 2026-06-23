@@ -5,6 +5,7 @@ import org.example.microkernelspring.core.hr.controller.dto.EmployeeSalaryHistor
 import org.example.microkernelspring.core.hr.controller.dto.RegisterSalaryChangeRequest;
 import org.example.microkernelspring.core.hr.service.EmployeeSalaryHistoryService;
 import org.example.microkernelspring.core.hr.service.dto.RegisterSalaryChangeDto;
+import org.example.microkernelspring.shared.infra.util.SecurityContextHelper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -16,7 +17,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/hr/tenants/{tenantId}/employees/{employeeId}/salary-history")
+@RequestMapping("/api/hr/employees/{employeeId}/salary-history")
 public class EmployeeSalaryHistoryController {
 
     private final EmployeeSalaryHistoryService salaryHistoryService;
@@ -29,11 +30,12 @@ public class EmployeeSalaryHistoryController {
 
     @GetMapping
     public ResponseEntity<Page<EmployeeSalaryHistoryResponse>> findHistory(
-            @PathVariable UUID tenantId,
             @PathVariable UUID employeeId,
             @PageableDefault(size = 20, sort = "effectiveDate")
             Pageable pageable
     ) {
+        UUID tenantId = SecurityContextHelper.getCurrentTenantId();
+
         Page<EmployeeSalaryHistoryResponse> response = salaryHistoryService
                 .findByEmployee(tenantId, employeeId, pageable)
                 .map(this::toResponse);
@@ -43,11 +45,11 @@ public class EmployeeSalaryHistoryController {
 
     @GetMapping("/current")
     public ResponseEntity<EmployeeSalaryHistoryResponse> findCurrentSalary(
-            @PathVariable UUID tenantId,
             @PathVariable UUID employeeId,
             @RequestParam(required = false) LocalDate at
     ) {
         LocalDate date = at != null ? at : LocalDate.now();
+        UUID tenantId = SecurityContextHelper.getCurrentTenantId();
 
         return ResponseEntity.ok(
                 toResponse(
@@ -62,10 +64,11 @@ public class EmployeeSalaryHistoryController {
 
     @PostMapping
     public ResponseEntity<EmployeeSalaryHistoryResponse> registerChange(
-            @PathVariable UUID tenantId,
             @PathVariable UUID employeeId,
             @Valid @RequestBody RegisterSalaryChangeRequest request
     ) {
+        UUID tenantId = SecurityContextHelper.getCurrentTenantId();
+
         RegisterSalaryChangeDto command = new RegisterSalaryChangeDto(
                 tenantId,
                 employeeId,

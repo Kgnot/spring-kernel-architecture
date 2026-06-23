@@ -12,14 +12,14 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/tenants/{tenantId}/lkp-units-of-measure")
+@RequestMapping("/api/lkp-units-of-measure")
 @RequiredArgsConstructor
 public class LkpUnitOfMeasureController {
 
     private final LkpUnitOfMeasureService lkpUnitOfMeasureService;
 
     @GetMapping
-    public ResponseEntity<List<LkpUnitOfMeasureResponse>> findAll(@PathVariable UUID tenantId) {
+    public ResponseEntity<List<LkpUnitOfMeasureResponse>> findAll() {
         List<LkpUnitOfMeasureResponse> response = lkpUnitOfMeasureService.findAll().stream()
                 .map(LkpUnitOfMeasureWebMapper::toResponse)
                 .toList();
@@ -29,7 +29,6 @@ public class LkpUnitOfMeasureController {
 
     @GetMapping("/{id}")
     public ResponseEntity<LkpUnitOfMeasureResponse> findById(
-            @PathVariable UUID tenantId,
             @PathVariable UUID id
     ) {
         LkpUnitOfMeasureResponse response = LkpUnitOfMeasureWebMapper.toResponse(

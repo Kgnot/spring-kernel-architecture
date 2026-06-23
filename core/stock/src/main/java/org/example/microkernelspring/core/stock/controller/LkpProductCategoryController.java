@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/tenants/{tenantId}/lkp-product-categories")
+@RequestMapping("/api/lkp-product-categories")
 @RequiredArgsConstructor
 public class LkpProductCategoryController {
 
     private final LkpProductCategoryService lkpProductCategoryService;
 
     @GetMapping
-    public ResponseEntity<List<LkpProductCategoryResponse>> findAll(@PathVariable UUID tenantId) {
+    public ResponseEntity<List<LkpProductCategoryResponse>> findAll() {
         List<LkpProductCategoryResponse> response = lkpProductCategoryService.findAll().stream()
                 .map(LkpProductCategoryWebMapper::toResponse)
                 .toList();
@@ -28,7 +28,6 @@ public class LkpProductCategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<LkpProductCategoryResponse> findById(
-            @PathVariable UUID tenantId,
             @PathVariable UUID id
     ) {
         LkpProductCategoryResponse response = LkpProductCategoryWebMapper.toResponse(
